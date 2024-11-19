@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Printer Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --bg-dark: #111827;
+            --bg-card: #1f2937;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            height: 400px;
+        }
+
+        .signals-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .signals-table th,
+        .signals-table td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .signals-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+        }
+
+        .buy { color: var(--success); }
+        .sell { color: var(--danger); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .stat-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Money Printer Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Portfolio Value</h3>
+                <p id="portfolio-value">₨ 0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Available Funds</h3>
+                <p id="available-funds">₨ 0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Returns</h3>
+                <p id="total-returns">0%</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Positions</h3>
+                <p id="active-positions">0</p>
+            </div>
+        </div>
+
+        <div class="chart-container" id="portfolio-chart">
+            <!-- Chart will be rendered here -->
+        </div>
+
+        <h2>Recent Signals</h2>
+        <table class="signals-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody id="signals-body">
+                <!-- Signals will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
