@@ -1,0 +1,207 @@
+{
+    "portfolio_name": "portfolio-2018",
+    "owner": "Llyr4472",
+    "creation_date": "2025-01-01",
+    "last_analyzed_date": "2025-02-08",
+    "available_funds": 1463.9,
+    "reserved": 0.0,
+    "assets": [
+        {
+            "symbol": "UPCL",
+            "name": "UNIVERSAL POWER COMPANY LTD",
+            "quantity": 13,
+            "price": 88.0,
+            "date": "2019-08-06"
+        },
+        {
+            "symbol": "KBL",
+            "name": "Kumari Bank Limited",
+            "quantity": 25,
+            "price": 263.0,
+            "date": "2021-01-04"
+        },
+        {
+            "symbol": "MLBBL",
+            "name": "Mithila LaghuBitta Bittiya Sanstha Limited",
+            "quantity": 10,
+            "price": 1788.0,
+            "date": "2021-10-05"
+        },
+        {
+            "symbol": "PCBL",
+            "name": "Prime Commercial Bank Ltd.",
+            "quantity": 100,
+            "price": 232.7,
+            "date": "2022-09-15"
+        },
+        {
+            "symbol": "NGPL",
+            "name": "Ngadi Group Power Ltd.",
+            "quantity": 10,
+            "price": 220.0,
+            "date": "2022-10-10"
+        },
+        {
+            "symbol": "SGHC",
+            "name": "Swet-Ganga Hydropower & Construction Limited",
+            "quantity": 10,
+            "price": 232.0,
+            "date": "2022-10-12"
+        },
+        {
+            "symbol": "SJCL",
+            "name": "SANJEN JALAVIDHYUT COMPANY LIMITED",
+            "quantity": 79,
+            "price": 237.0,
+            "date": "2022-12-14"
+        },
+        {
+            "symbol": "GMFIL",
+            "name": "Guheshowori Merchant Bank & Finance Co. Ltd.",
+            "quantity": 21,
+            "price": 359.0,
+            "date": "2023-02-08"
+        },
+        {
+            "symbol": "RADHI",
+            "name": "Radhi Bidyut Company Ltd",
+            "quantity": 11,
+            "price": 265.9,
+            "date": "2023-03-28"
+        },
+        {
+            "symbol": "NABIL",
+            "name": "Nabil Bank Limited",
+            "quantity": 10,
+            "price": 606.5,
+            "date": "2023-03-29"
+        },
+        {
+            "symbol": "PRVU",
+            "name": "Prabhu  Bank Limited",
+            "quantity": 10,
+            "price": 169.4,
+            "date": "2023-04-12"
+        },
+        {
+            "symbol": "SAHAS",
+            "name": "Sahas Urja Limited",
+            "quantity": 10,
+            "price": 517.9,
+            "date": "2023-06-05"
+        },
+        {
+            "symbol": "MBL",
+            "name": "Machhapuchhre Bank Limited",
+            "quantity": 12,
+            "price": 241.2,
+            "date": "2023-07-18"
+        },
+        {
+            "symbol": "BARUN",
+            "name": "Barun Hydropower Co. Ltd.",
+            "quantity": 11,
+            "price": 209.8,
+            "date": "2023-09-05"
+        },
+        {
+            "symbol": "ILBS",
+            "name": "Infinity Laghubitta Bittiya Sanstha Limited",
+            "quantity": 13,
+            "price": 684.0,
+            "date": "2023-10-19"
+        },
+        {
+            "symbol": "NRIC",
+            "name": "Nepal Reinsurance Company Limited",
+            "quantity": 10,
+            "price": 621.1,
+            "date": "2023-11-07"
+        },
+        {
+            "symbol": "GBIME",
+            "name": "Global IME Bank Limited",
+            "quantity": 10,
+            "price": 208.0,
+            "date": "2023-11-10"
+        },
+        {
+            "symbol": "MDB",
+            "name": "Miteri Development Bank Limited",
+            "quantity": 10,
+            "price": 417.8,
+            "date": "2024-01-11"
+        },
+        {
+            "symbol": "HBL",
+            "name": "Himalayan Bank Limited",
+            "quantity": 10,
+            "price": 214.5,
+            "date": "2024-01-17"
+        },
+        {
+            "symbol": "SBL",
+            "name": "Siddhartha Bank Limited",
+            "quantity": 10,
+            "price": 228.0,
+            "date": "2024-03-05"
+        },
+        {
+            "symbol": "NBL",
+            "name": "Nepal Bank Limited",
+            "quantity": 10,
+            "price": 230.0,
+            "date": "2024-03-05"
+        },
+        {
+            "symbol": "BEDC",
+            "name": "Bhugol Energy Development Company Limited",
+            "quantity": 10,
+            "price": 366.0,
+            "date": "2024-03-29"
+        },
+        {
+            "symbol": "RHGCL",
+            "name": "Rapti Hydro And General Construction Limited",
+            "quantity": 10,
+            "price": 311.0,
+            "date": "2024-03-29"
+        },
+        {
+            "symbol": "MCHL",
+            "name": "Menchhiyam Hydropower Limited",
+            "quantity": 10,
+            "price": 355.0,
+            "date": "2024-03-29"
+        },
+        {
+            "symbol": "MEHL",
+            "name": "Manakamana Engineering Hydropower Limited",
+            "quantity": 13,
+            "price": 316.3,
+            "date": "2024-04-01"
+        },
+        {
+            "symbol": "SFCL",
+            "name": "Samriddhi Finance Company Limited",
+            "quantity": 10,
+            "price": 336.0,
+            "date": "2024-04-08"
+        },
+        {
+            "symbol": "LSL",
+            "name": "Laxmi Sunrise Bank Limited",
+            "quantity": 10,
+            "price": 146.2,
+            "date": "2024-05-10"
+        },
+        {
+            "symbol": "MHNL",
+            "name": "Mountain Hydro Nepal Limited",
+            "quantity": 13,
+            "price": 246.0,
+            "date": "2024-06-10"
+        }
+    ],
+    "orders": []
+}

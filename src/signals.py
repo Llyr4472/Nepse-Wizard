@@ -5,7 +5,6 @@ import pandas_ta as ta
 from termcolor import cprint
 import sys
 
-
 def macd(df, lag=0):
     """
     Calculates the MACD (Moving Average Convergence Divergence) signal for a given DataFrame.
@@ -17,30 +16,32 @@ def macd(df, lag=0):
     Returns:
         int: The MACD signal, where 1 indicates a buy signal, -1 indicates a sell signal, and 0 indicates no signal.
     """
-
-    if len(df) < 50:
+    if len(df) < 26 + 9:  # Ensure sufficient data
         return 0
+    
+    # Calculate MACD
+    df.ta.macd(fast=12, slow=26, signal=9, append=True)
+    hist_col = 'MACDh_12_26_9'
+    
+    signal = 0
+    # Check for crossovers in the last (lag+1) periods
+    for i in range(-1 - lag, -1 + 1):
+        if i < -len(df) or i >= 0:
+            continue  # Skip out-of-bounds indices
+        
+        # Bullish crossover (histogram crosses above zero)
+        if df[hist_col].iloc[i] > 0 and df[hist_col].iloc[i-1] <= 0:
+            signal = 1
+            break
+        
+        # Bearish crossover (histogram crosses below zero)
+        if df[hist_col].iloc[i] < 0 and df[hist_col].iloc[i-1] >= 0:
+            signal = -1
+            break
+    
+    return signal
 
-    # Add MACD
-    df.ta.macd(close='close', fast=12, slow=26, signal=9, append=True)
-
-    # Define buy and sell signals
-    macd_value = 0
-    for i in range(-1, -(lag+2), -1):
-        if macd_value == 0:
-            if (df['MACD_12_26_9'].iloc[i] > df['MACDs_12_26_9'].iloc[i] and any([
-                df['MACD_12_26_9'].iloc[i-1] < df['MACDs_12_26_9'].iloc[i-1],
-                df['MACD_12_26_9'].iloc[i-2] < df['MACDs_12_26_9'].iloc[i-2],
-                ])):
-                macd_value = 1
-            elif (df['MACD_12_26_9'].iloc[i] < df['MACDs_12_26_9'].iloc[i] and any([
-                df['MACD_12_26_9'].iloc[i-1] > df['MACDs_12_26_9'].iloc[i-1],
-                df['MACD_12_26_9'].iloc[i-2] > df['MACDs_12_26_9'].iloc[i-2],
-                ])):
-                macd_value = -1
-    return macd_value
-
-def rsi(df,lag=0):
+def rsi(df, lag=0):
     """
     Calculates the Relative Strength Index (RSI) for the given DataFrame `df` and returns a signal based on the RSI values.
 
@@ -51,16 +52,39 @@ def rsi(df,lag=0):
     Returns:
         int: The RSI signal, where -1 indicates a sell signal, 0 indicates no signal, and 1 indicates a buy signal.
     """
+    rsi_length = 14
+    if len(df) < rsi_length + lag:
+        return 0
     
-    if len(df)<20:return 0
-    df['RSI'] = ta.rsi(df['close']) #append=True didn't work with RSI
-    rsi = 0
-    for i in [-i for i in range(1, lag+2)]:
-        if rsi == 0:
-            rsi = -1 if df['RSI'].iloc[i]>70 else (1 if df['RSI'].iloc[i]<30 else 0)
-    return rsi
+    df['RSI'] = ta.rsi(df['close'], length=rsi_length)
+    
+    buy_signal = False
+    sell_signal = False
+    
+    # Check last (lag+1) periods
+    for i in range(-1 - lag, -1 + 1):
+        if i < -len(df) or i >= 0:
+            continue
+        
+        prev_i = max(i-1, -len(df))
+        current_rsi = df['RSI'].iloc[i]
+        prev_rsi = df['RSI'].iloc[prev_i]
+        
+        # Cross above 30
+        if current_rsi >= 30 and prev_rsi < 30:
+            buy_signal = True
+        
+        # Cross below 70
+        if current_rsi <= 70 and prev_rsi > 70:
+            sell_signal = True
+    
+    if buy_signal and not sell_signal:
+        return 1
+    elif sell_signal and not buy_signal:
+        return -1
+    return 0
 
-def ema_crossover(df,lag=0):
+def ema_crossover(df, lag=0):
     """
     Calculates the Exponential Moving Average (EMA) crossover signal for a given DataFrame `df`.
 
@@ -73,21 +97,38 @@ def ema_crossover(df,lag=0):
     Returns:
         int: 1 if the EMA crossover signal is a buy signal, -1 if the signal is a sell signal, 0 if there is no signal.
     """
-    if len(df)<62:return 0
-    emas_used = [3,5,8,10,12,15,30,35,40,45,50,60]
-    for ema in emas_used:
-        #df[f'ema{ema}'] = EMA(period=ema,input_values=df['close'].tolist())
-        df.ta.ema(length=ema,append=True).mean()
+    short_period = 9
+    long_period = 21
+    if len(df) < long_period + lag:
+        return 0
+    
+    df.ta.ema(length=short_period, append=True)
+    df.ta.ema(length=long_period, append=True)
+    
+    short_ema = f'EMA_{short_period}'
+    long_ema = f'EMA_{long_period}'
+    
+    signal = 0
+    for i in range(-1 - lag, -1 + 1):
+        if i < -len(df) or i >= 0:
+            continue
+        
+        prev_i = max(i-1, -len(df))
+        # Bullish crossover
+        if df[short_ema].iloc[i] > df[long_ema].iloc[i] and \
+           df[short_ema].iloc[prev_i] <= df[long_ema].iloc[prev_i]:
+            signal = 1
+            break
+        
+        # Bearish crossover
+        if df[short_ema].iloc[i] < df[long_ema].iloc[i] and \
+           df[short_ema].iloc[prev_i] >= df[long_ema].iloc[prev_i]:
+            signal = -1
+            break
+    
+    return signal
 
-    for i in [-i for i in range(1, lag+2)]:
-        # cmin=round(min(df["EMA_3"].iloc[i],df["EMA_5"].iloc[i],df["EMA_8"].iloc[i],df["EMA_10"].iloc[i],df["EMA_12"].iloc[i],df["EMA_15"].iloc[i],),2)
-        cmin = round(df[["EMA_3", "EMA_5", "EMA_8", "EMA_10", "EMA_12", "EMA_15"]].iloc[i].min(),1)
-        cmax = round(df[["EMA_30", "EMA_35", "EMA_40", "EMA_45", "EMA_50", "EMA_60"]].iloc[i].max(),1)
-        if cmin>cmax:return 1
-        elif cmin<cmax:return -1
-    return 0
-
-def bbands(df):
+def bbands(df, lag=0):
     """
     Calculates the Bollinger Bands (BBands) for the given DataFrame `df` and returns a signal based on the current price relative to the BBands.
 
@@ -97,22 +138,36 @@ def bbands(df):
     Returns:
         int: 1 if the current price is below the lower BBand, -1 if the current price is above the upper BBand, 0 otherwise.
     """
+    bb_length = 20
+    if len(df) < bb_length + lag:
+        return 0
+    
+    df.ta.bbands(length=bb_length, std=2, append=True)
+    df['BB_%b'] = (df['close'] - df[f'BBL_{bb_length}_2.0']) / \
+                 (df[f'BBU_{bb_length}_2.0'] - df[f'BBL_{bb_length}_2.0'])
+    
+    signal = 0
+    for i in range(-1 - lag, -1 + 1):
+        if i < -len(df) or i >= 0:
+            continue
+        
+        prev_i = max(i-1, -len(df))
+        current = df['BB_%b'].iloc[i]
+        prev = df['BB_%b'].iloc[prev_i]
+        
+        # Buy signal: %b crosses above 0
+        if current > 0 and prev <= 0:
+            signal = 1
+            break
+        
+        # Sell signal: %b crosses below 1
+        if current < 1 and prev >= 1:
+            signal = -1
+            break
+    
+    return signal
 
-    if len(df)<20:return 0
-    df.ta.bbands(close='close',append=True)
-
-    buy_threshold = -0.02
-    sell_threshold = -0.02
-
-    if df['close'].iloc[-1] < df['BBL_5_2.0'].iloc[-1] * (1 - buy_threshold):  # Buy signal if the closing price is below the lower Bollinger Band
-        return 1
-
-    if df['close'].iloc[-1] > df['BBU_5_2.0'].iloc[-1] * (1 + sell_threshold):  # Sell signal if the closing price is above the upper Bollinger Band
-        return -1
-
-    return 0  # No signal if the above conditions are not met
-
-def hybrid(df,lag=0):
+def hybrid(df, lag=0):
     """
     Calculates a hybrid trading signal based on the combination of EMA crossover, MACD, RSI, and Bollinger Bands indicators.
 
@@ -123,19 +178,30 @@ def hybrid(df,lag=0):
     Returns:
         int: The hybrid trading signal, where 1 indicates a buy signal, -1 indicates a sell signal, and 0 indicates a neutral signal.
     """
+    df_copy = df.copy()
     
-    df = df.tail(100).copy()
-
-    ema_value = ema_crossover(df,lag=lag)
-    macd_value = macd(df,lag=lag)
-    rsi_value = rsi(df,lag=lag)
-    bbands_value = bbands(df)
-
-    total_signal = ema_value + macd_value + rsi_value + bbands_value
-
-    if total_signal >= 2:
+    signals = {
+        'macd': macd(df_copy, lag),
+        'ema': ema_crossover(df_copy, lag),
+        'rsi': rsi(df_copy, lag),
+        'bbands': bbands(df_copy, lag)
+    }
+    
+    # Weighted scoring system
+    weights = {
+        'macd': 2,    # Most reliable
+        'ema': 2,     # Important trend indicator
+        'rsi': 1,     # Momentum confirmation
+        'bbands': 1   # Volatility confirmation
+    }
+    
+    total_score = sum(signals[indicator] * weights[indicator] 
+                     for indicator in signals)
+    
+    # Require strong consensus for signals
+    if total_score >= 3:
         return 1
-    elif total_signal <= -2:
+    elif total_score <= -3:
         return -1
     return 0
 
@@ -170,7 +236,7 @@ def main():
         macd_value = macd(df,lag=lag)
         ema_value = ema_crossover(df,lag=lag)
         rsi_value = rsi(df,lag=lag)
-        bbands_value = bbands(df)
+        bbands_value = bbands(df,lag=lag)  # Added lag parameter here
         sum = ema_value + macd_value + rsi_value + bbands_value 
         action = "buy" if sum>=2 else "sell" if sum < -2 else ''
         if intent == None or intent == action:

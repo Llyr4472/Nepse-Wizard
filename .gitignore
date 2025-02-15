@@ -5,3 +5,4 @@ dump.json
 temp/
 *.config
 .venv
+models/

@@ -2,9 +2,10 @@ from Stock import *
 import signals
 import pandas as pd
 import plotter
+from strategy import AdvancedStrategy
 
 
-def backtest(stock,strategy='hybrid',plot=False) :
+def backtest(stock,strategy='advanced',plot=False) :
     """
     Performs a backtest of a given stock using the specified trading strategy.
 
@@ -33,8 +34,13 @@ def backtest(stock,strategy='hybrid',plot=False) :
         df_trimmed = df.copy(deep=True)
         df_trimmed= df_trimmed.loc[df_trimmed['date'] <= str(date)]
 
-        strat = getattr(signals,strategy)
-        signal = strat(df_trimmed)
+        if strategy == 'advanced':
+            signal = AdvancedStrategy(stock.symbol).generate_signal(df_trimmed)[0]
+        
+        else:
+            strat = getattr(signals,strategy)
+            signal = strat(df_trimmed)
+        
 
         if signal > 0 and pos==0:
             bp=close
@@ -115,4 +121,4 @@ def backtest(stock,strategy='hybrid',plot=False) :
         plotter.plot(df,buy_dates,sell_dates)
 
 if __name__ == '__main__':
-    backtest(Stock("akjcl"),strategy='hybrid',plot=True)
+    backtest(Stock("akjcl"),plot=True)
