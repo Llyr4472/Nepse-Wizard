@@ -69,7 +69,8 @@ def request_json(endpoint):
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
-        print("Error",response.status_code,f" in {url}")
+    print("Error", response.status_code, f" in {url}")
+    return {}
 
 def dump(data):
     with open("dump.json",'w') as f:
